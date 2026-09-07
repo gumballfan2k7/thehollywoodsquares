@@ -74,9 +74,7 @@ function loadSelectedQuestion() {
     document.getElementById('input-q').value = q["Question"] || q["question"] || "";
     document.getElementById('input-truth').value = q["Actual Answer"] || q["actual answer"] || q["True Answer"] || "";
     
-    // Clear star answer box so host can type live what the celebrity says
     document.getElementById('input-star').value = "";
-
     sendTextData();
 }
 
@@ -99,6 +97,13 @@ function revealStar() {
     sendCommand({ 
         type: 'REVEAL_STAR',
         starAns: starAns
+    });
+}
+
+function revealChoice(choice) {
+    sendCommand({
+        type: 'REVEAL_CHOICE',
+        choice: choice
     });
 }
 
