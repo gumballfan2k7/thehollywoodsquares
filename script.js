@@ -10,6 +10,8 @@ const overlay = document.getElementById('tv-overlay');
 const questionText = document.getElementById('display-question');
 const starAnsBox = document.getElementById('display-star-ans');
 const starAnsText = document.getElementById('star-ans-text');
+const choiceBox = document.getElementById('display-choice');
+const choiceText = document.getElementById('choice-text');
 const actualAnsBox = document.getElementById('display-actual-ans');
 const actualAnsText = document.getElementById('actual-ans-text');
 
@@ -41,8 +43,18 @@ function processCommand(data) {
 
         case 'REVEAL_STAR':
             starAnsBox.classList.remove('hidden');
-            // Typewriter effect on TV screen
             animateStarText(data.starAns || "");
+            break;
+
+        case 'REVEAL_CHOICE':
+            choiceBox.classList.remove('hidden', 'choice-agree', 'choice-disagree');
+            if (data.choice === 'AGREE') {
+                choiceText.textContent = 'PLAYER CHOSE: AGREE';
+                choiceBox.classList.add('choice-agree');
+            } else if (data.choice === 'DISAGREE') {
+                choiceText.textContent = 'PLAYER CHOSE: DISAGREE';
+                choiceBox.classList.add('choice-disagree');
+            }
             break;
 
         case 'REVEAL_TRUTH':
@@ -53,6 +65,7 @@ function processCommand(data) {
             overlay.classList.add('hidden');
             questionText.classList.add('hidden');
             starAnsBox.classList.add('hidden');
+            choiceBox.classList.add('hidden');
             actualAnsBox.classList.add('hidden');
             clearInterval(starTypewriterInterval);
             starAnsText.textContent = '';
@@ -104,7 +117,7 @@ function animateStarText(text) {
         } else {
             clearInterval(starTypewriterInterval);
         }
-    }, 45); // Adjust typing speed in ms
+    }, 45);
 }
 
 function updateSquareGlow() {
