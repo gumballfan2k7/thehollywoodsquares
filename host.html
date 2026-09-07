@@ -11,9 +11,13 @@
     <h1>🎙️ HOST CONTROLLER PANEL</h1>
 
     <div class="host-container">
-        <!-- Square Selector -->
+        <!-- 1. Turn Switcher -->
         <div class="panel-section">
-            <h3>1. Pick Square to Highlight/Glow</h3>
+            <h3>1. Select Current Turn</h3>
+            <button id="btn-turn-x" class="btn-x btn-active" onclick="setTurn('X')" style="width: 48%;">Player X (Purple)</button>
+            <button id="btn-turn-o" class="btn-o" onclick="setTurn('O')" style="width: 48%;">Player O (Yellow)</button>
+
+            <h3 style="margin-top: 15px;">2. Pick Square to Highlight</h3>
             <div class="host-grid">
                 <button class="sq-btn" onclick="selectSquare(0)">Star 1</button>
                 <button class="sq-btn" onclick="selectSquare(1)">Star 2</button>
@@ -28,9 +32,9 @@
             <button class="action-btn clear-glow" onclick="clearGlow()">Turn Off Glow</button>
         </div>
 
-        <!-- Question & Answers Inputs -->
+        <!-- 2. Inputs -->
         <div class="panel-section">
-            <h3>2. Type Content</h3>
+            <h3>3. Type Content</h3>
             <label>Trivia Question:</label>
             <textarea id="input-q" rows="2" placeholder="e.g. What color is polar bear skin?"></textarea>
 
@@ -41,9 +45,9 @@
             <input type="text" id="input-truth" placeholder="e.g. Black!">
         </div>
 
-        <!-- Reveal Controls -->
+        <!-- 3. Reveals -->
         <div class="panel-section">
-            <h3>3. Screen Reveal Controls</h3>
+            <h3>4. Screen Reveal Controls</h3>
             <button class="reveal-btn" onclick="toggleOverlay(true)">SHOW Overlay Box</button>
             <button class="reveal-btn" onclick="toggleOverlay(false)">HIDE Overlay Box</button>
             <hr>
@@ -53,12 +57,12 @@
             <button class="action-btn danger" onclick="resetReveals()">Hide All Text</button>
         </div>
 
-        <!-- Mark Square -->
+        <!-- 4. Mark Square -->
         <div class="panel-section">
-            <h3>4. Award Selected Square</h3>
-            <button class="mark-btn x-btn" onclick="markSquare('X')">Mark as X</button>
-            <button class="mark-btn o-btn" onclick="markSquare('O')">Mark as O</button>
-            <button class="mark-btn clear-btn" onclick="markSquare('')">Clear Square</button>
+            <h3>5. Award Selected Square</h3>
+            <button class="mark-btn btn-x" onclick="markSquare('X')">Mark X</button>
+            <button class="mark-btn btn-o" onclick="markSquare('O')">Mark O</button>
+            <button class="mark-btn clear-btn" onclick="markSquare('')">Clear</button>
         </div>
     </div>
 
