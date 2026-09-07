@@ -1,0 +1,105 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1a0933;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #ffd700;
+    text-shadow: 2px 2px #ff0055;
+    font-size: 2.5rem;
+}
+
+.game-info {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.player-x { color: #00e5ff; font-weight: bold; }
+.player-o { color: #ff0055; font-weight: bold; }
+
+/* 3x3 Grid Layout */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 120px);
+    grid-gap: 10px;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.square {
+    width: 120px;
+    height: 120px;
+    background-color: #33145a;
+    border: 3px solid #ffd700;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 10px;
+    box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+.square:hover {
+    transform: scale(1.05);
+    background-color: #4a1d82;
+}
+
+.star-name {
+    font-size: 0.8rem;
+    color: #ccc;
+}
+
+.mark {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.mark.X { color: #00e5ff; }
+.mark.O { color: #ff0055; }
+
+/* Modal Styling */
+.modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-color: #2b1055;
+    padding: 30px;
+    border: 3px solid #ffd700;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+}
+
+button {
+    background-color: #ffd700;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #fff;
+}
