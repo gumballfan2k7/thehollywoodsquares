@@ -1,7 +1,10 @@
-// Open communication channel with Host panel
 const channel = new BroadcastChannel('hollywood_squares');
 
+let currentTurn = 'X';
+let activeSquareIndex = null;
+
 // UI Elements
+const turnDisplay = document.getElementById('tv-turn-display');
 const squares = document.querySelectorAll('.square');
 const overlay = document.getElementById('tv-overlay');
 const questionText = document.getElementById('display-question');
@@ -10,16 +13,20 @@ const starAnsText = document.getElementById('star-ans-text');
 const actualAnsBox = document.getElementById('display-actual-ans');
 const actualAnsText = document.getElementById('actual-ans-text');
 
-// Listen for commands from host.html
-channel.onmessage = (event) => {
-    const data = event.data;
+function processCommand(data) {
+    if (!data) return;
 
     switch (data.type) {
+        case 'SET_TURN':
+            currentTurn = data.turn;
+            turnDisplay.textContent = `Player ${currentTurn}`;
+            turnDisplay.className = currentTurn === 'X' ? 'text-x' : 'text-o';
+            updateSquareGlow(); // Update active glow color immediately
+            break;
+
         case 'SELECT_SQUARE':
-            squares.forEach(sq => sq.classList.remove('glowing'));
-            if (data.index !== null) {
-                document.getElementById(`sq-${data.index}`).classList.add('glowing');
-            }
+            activeSquareIndex = data.index;
+            updateSquareGlow();
             break;
 
         case 'UPDATE_TEXT':
@@ -46,9 +53,38 @@ channel.onmessage = (event) => {
             break;
 
         case 'MARK_SQUARE':
-            const markDiv = document.querySelector(`#sq-${data.index} .mark`);
-            markDiv.textContent = data.mark;
-            markDiv.className = `mark ${data.mark}`;
+            if (data.index !== null) {
+                const markDiv = document.querySelector(`#sq-${data.index} .mark`);
+                markDiv.textContent = data.mark;
+                markDiv.className = `mark ${data.mark}`;
+            }
             break;
     }
-};
+}
+
+function updateSquareGlow() {
+    // Remove glow from all squares
+    squares.forEach(sq => {
+        sq.classList.remove('glow-x', 'glow-o');
+    });
+
+    // Add glowing class based on current turn color
+    if (activeSquareIndex !== null) {
+        const activeSquare = document.getElementById(`sq-${activeSquareIndex}`);
+        if (activeSquare) {
+            const glowClass = (currentTurn === 'X') ? 'glow-x' : 'glow-o';
+            activeSquare.classList.add(glowClass);
+        }
+    }
+}
+
+// 1. Primary BroadcastChannel Listener
+channel.onmessage = (event) => processCommand(event.data);
+
+// 2. Storage Event Listener Backup
+window.addEventListener('storage', (event) => {
+    if (event.key === 'hs_command') {
+        const data = JSON.parse(event.newValue);
+        processCommand(data);
+    }
+});
