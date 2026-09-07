@@ -1,137 +1,54 @@
-// Sample Questions Database (Question, True Answer, Bluff Answer)
-const questionsDB = [
-    {
-        q: "What color is a polar bear's skin under its fur?",
-        trueAns: "Black",
-        bluffAns: "Pink"
-    },
-    {
-        q: "Which planet in our solar system spins backwards?",
-        trueAns: "Venus",
-        bluffAns: "Mars"
-    },
-    {
-        q: "How many hearts does an octopus have?",
-        trueAns: "Three",
-        bluffAns: "One"
-    },
-    {
-        q: "In what country was Hawaiian pizza invented?",
-        trueAns: "Canada",
-        bluffAns: "Hawaii"
-    }
-];
-
-let boardState = Array(9).fill(null);
-let currentPlayer = 'X';
-let activeSquareIndex = null;
-let currentQuestion = null;
-let isStarTellingTruth = false;
-
-const winningCombos = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-    [0, 4, 8], [2, 4, 6]             // Diagonals
-];
+// Open communication channel with Host panel
+const channel = new BroadcastChannel('hollywood_squares');
 
 // UI Elements
 const squares = document.querySelectorAll('.square');
-const modal = document.getElementById('question-modal');
-const questionText = document.getElementById('question-text');
-const starResponse = document.getElementById('star-response');
-const currentPlayerDisplay = document.getElementById('current-player');
-const gameStatus = document.getElementById('game-status');
+const overlay = document.getElementById('tv-overlay');
+const questionText = document.getElementById('display-question');
+const starAnsBox = document.getElementById('display-star-ans');
+const starAnsText = document.getElementById('star-ans-text');
+const actualAnsBox = document.getElementById('display-actual-ans');
+const actualAnsText = document.getElementById('actual-ans-text');
 
-// Handle Square Click
-squares.forEach(square => {
-    square.addEventListener('click', () => {
-        const index = square.getAttribute('data-index');
-        
-        // Don't click occupied squares
-        if (boardState[index] !== null) return;
+// Listen for commands from host.html
+channel.onmessage = (event) => {
+    const data = event.data;
 
-        activeSquareIndex = index;
-        openQuestionModal();
-    });
-});
+    switch (data.type) {
+        case 'SELECT_SQUARE':
+            squares.forEach(sq => sq.classList.remove('glowing'));
+            if (data.index !== null) {
+                document.getElementById(`sq-${data.index}`).classList.add('glowing');
+            }
+            break;
 
-function openQuestionModal() {
-    // Pick random question
-    currentQuestion = questionsDB[Math.floor(Math.random() * questionsDB.length)];
-    
-    // Decide randomly if the star tells the truth or bluffs (50/50)
-    isStarTellingTruth = Math.random() < 0.5;
-    const response = isStarTellingTruth ? currentQuestion.trueAns : currentQuestion.bluffAns;
+        case 'UPDATE_TEXT':
+            if (data.question !== undefined) questionText.textContent = data.question;
+            if (data.starAns !== undefined) starAnsText.textContent = data.starAns;
+            if (data.truthAns !== undefined) actualAnsText.textContent = data.truthAns;
+            break;
 
-    questionText.textContent = currentQuestion.q;
-    starResponse.textContent = response;
-    modal.classList.remove('hidden');
-}
+        case 'TOGGLE_OVERLAY':
+            if (data.show) overlay.classList.remove('hidden');
+            else overlay.classList.add('hidden');
+            break;
 
-// Player choices
-document.getElementById('agree-btn').addEventListener('click', () => handlePlayerChoice(true));
-document.getElementById('disagree-btn').addEventListener('click', () => handlePlayerChoice(false));
+        case 'REVEAL_ELEMENT':
+            if (data.element === 'question') questionText.classList.remove('hidden');
+            if (data.element === 'star') starAnsBox.classList.remove('hidden');
+            if (data.element === 'truth') actualAnsBox.classList.remove('hidden');
+            break;
 
-function handlePlayerChoice(playerAgreed) {
-    modal.classList.add('hidden');
+        case 'RESET_REVEALS':
+            questionText.classList.add('hidden');
+            starAnsBox.classList.add('hidden');
+            actualAnsBox.classList.add('hidden');
+            break;
 
-    // Was the player correct?
-    // Player wins if: (Agreed & Star told truth) OR (Disagreed & Star bluffed)
-    const playerIsCorrect = (playerAgreed === isStarTellingTruth);
-    const opponent = currentPlayer === 'X' ? 'O' : 'X';
-
-    let squareOwner = null;
-
-    if (playerIsCorrect) {
-        squareOwner = currentPlayer;
-    } else {
-        // According to official rules: Opponent gets square UNLESS it causes opponent to win 3-in-a-row.
-        if (wouldCauseWin(opponent, activeSquareIndex)) {
-            alert(`Player ${currentPlayer} was wrong, but ${opponent} cannot win on a wrong answer! Square remains unclaimed.`);
-            switchTurn();
-            return;
-        } else {
-            squareOwner = opponent;
-        }
+        case 'MARK_SQUARE':
+            const markDiv = document.querySelector(`#sq-${data.index} .mark`);
+            markDiv.textContent = data.mark;
+            markDiv.className = `mark ${data.mark}`;
+            break;
     }
-
-    claimSquare(activeSquareIndex, squareOwner);
-
-    if (checkWin(squareOwner)) {
-        gameStatus.textContent = `🎉 PLAYER ${squareOwner} WINS THE GAME! 🎉`;
-        disableBoard();
-    } else if (boardState.every(cell => cell !== null)) {
-        gameStatus.textContent = "It's a Tie!";
-    } else {
-        switchTurn();
-    }
-}
-
-function claimSquare(index, owner) {
-    boardState[index] = owner;
-    const markDiv = squares[index].querySelector('.mark');
-    markDiv.textContent = owner;
-    markDiv.classList.add(owner);
-}
-
-function switchTurn() {
-    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-    currentPlayerDisplay.textContent = `Player ${currentPlayer}`;
-    currentPlayerDisplay.className = `player-${currentPlayer.toLowerCase()}`;
-}
-
-function checkWin(player) {
-    return winningCombos.some(combo => {
-        return combo.every(index => boardState[index] === player);
-    });
-}
-
-function wouldCauseWin(player, newIndex) {
-    const tempBoard = [...boardState];
-    tempBoard[newIndex] = player;
-    return winningCombos.some(combo => combo.every(i => tempBoard[i] === player));
-}
-
-function disableBoard() {
-    squares.forEach(sq => sq.style.pointerEvents = 'none');
-}
+};
