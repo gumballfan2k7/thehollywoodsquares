@@ -3,43 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hollywood Squares</title>
+    <title>Hollywood Squares - TV Display</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="tv-body">
 
-    <h1>HOLLYWOOD SQUARES</h1>
+    <h1 class="main-title">HOLLYWOOD SQUARES</h1>
 
-    <div class="game-info">
-        <p>Current Turn: <span id="current-player" class="player-x">Player X</span></p>
-        <p id="game-status"></p>
-    </div>
-
-    <!-- 3x3 Grid -->
+    <!-- 3x3 Grid with Bigger Squares -->
     <div class="grid-container" id="grid">
-        <!-- 9 Squares generated dynamically or hardcoded -->
-        <div class="square" data-index="0"><span class="star-name">Star 1</span><div class="mark"></div></div>
-        <div class="square" data-index="1"><span class="star-name">Star 2</span><div class="mark"></div></div>
-        <div class="square" data-index="2"><span class="star-name">Star 3</span><div class="mark"></div></div>
-        <div class="square" data-index="3"><span class="star-name">Star 4</span><div class="mark"></div></div>
-        <div class="square" data-index="4"><span class="star-name">Star 5</span><div class="mark"></div></div>
-        <div class="square" data-index="5"><span class="star-name">Star 6</span><div class="mark"></div></div>
-        <div class="square" data-index="6"><span class="star-name">Star 7</span><div class="mark"></div></div>
-        <div class="square" data-index="7"><span class="star-name">Star 8</span><div class="mark"></div></div>
-        <div class="square" data-index="8"><span class="star-name">Star 9</span><div class="mark"></div></div>
+        <div class="square" id="sq-0"><span class="star-name">Star 1</span><div class="mark"></div></div>
+        <div class="square" id="sq-1"><span class="star-name">Star 2</span><div class="mark"></div></div>
+        <div class="square" id="sq-2"><span class="star-name">Star 3</span><div class="mark"></div></div>
+        <div class="square" id="sq-3"><span class="star-name">Star 4</span><div class="mark"></div></div>
+        <div class="square" id="sq-4"><span class="star-name">Star 5</span><div class="mark"></div></div>
+        <div class="square" id="sq-5"><span class="star-name">Star 6</span><div class="mark"></div></div>
+        <div class="square" id="sq-6"><span class="star-name">Star 7</span><div class="mark"></div></div>
+        <div class="square" id="sq-7"><span class="star-name">Star 8</span><div class="mark"></div></div>
+        <div class="square" id="sq-8"><span class="star-name">Star 9</span><div class="mark"></div></div>
     </div>
 
-    <!-- Question Modal -->
-    <div id="question-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2 id="star-title">Star's Square</h2>
-            <p id="question-text">Question goes here...</p>
-            <div class="answer-box">
-                <p><strong>Star Says:</strong> "<span id="star-response">...</span>"</p>
+    <!-- On-Screen Question & Answer Display -->
+    <div id="tv-overlay" class="tv-overlay hidden">
+        <div class="overlay-card">
+            <h2 id="display-question" class="question-text hidden">Question goes here...</h2>
+            <div id="display-star-ans" class="answer-box star-box hidden">
+                <p><strong>STAR SAYS:</strong></p>
+                <p id="star-ans-text">...</p>
             </div>
-            <p>Do you AGREE or DISAGREE with the star?</p>
-            <button id="agree-btn">AGREE</button>
-            <button id="disagree-btn">DISAGREE</button>
+            <div id="display-actual-ans" class="answer-box truth-box hidden">
+                <p><strong>ACTUAL TRUTH:</strong></p>
+                <p id="actual-ans-text">...</p>
+            </div>
         </div>
     </div>
 
