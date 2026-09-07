@@ -5,64 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Host Controller Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body class="host-body">
 
     <h1>🎙️ HOST CONTROLLER PANEL</h1>
 
     <div class="host-container">
-        <!-- 1. Turn Switcher -->
+        <!-- 1. Turn & Square Selection -->
         <div class="panel-section">
-            <h3>1. Select Current Turn</h3>
+            <h3>1. Turn Selection</h3>
             <button id="btn-turn-x" class="btn-x btn-active" onclick="setTurn('X')" style="width: 48%;">Player X (Purple)</button>
             <button id="btn-turn-o" class="btn-o" onclick="setTurn('O')" style="width: 48%;">Player O (Yellow)</button>
 
             <h3 style="margin-top: 15px;">2. Pick Square to Highlight</h3>
             <div class="host-grid">
-                <button class="sq-btn" onclick="selectSquare(0)">Star 1</button>
-                <button class="sq-btn" onclick="selectSquare(1)">Star 2</button>
-                <button class="sq-btn" onclick="selectSquare(2)">Star 3</button>
-                <button class="sq-btn" onclick="selectSquare(3)">Star 4</button>
-                <button class="sq-btn" onclick="selectSquare(4)">Star 5</button>
-                <button class="sq-btn" onclick="selectSquare(5)">Star 6</button>
-                <button class="sq-btn" onclick="selectSquare(6)">Star 7</button>
-                <button class="sq-btn" onclick="selectSquare(7)">Star 8</button>
-                <button class="sq-btn" onclick="selectSquare(8)">Star 9</button>
+                <button class="sq-btn" onclick="selectSquare(0)">Square 1</button>
+                <button class="sq-btn" onclick="selectSquare(1)">Square 2</button>
+                <button class="sq-btn" onclick="selectSquare(2)">Square 3</button>
+                <button class="sq-btn" onclick="selectSquare(3)">Square 4</button>
+                <button class="sq-btn" onclick="selectSquare(4)">Square 5</button>
+                <button class="sq-btn" onclick="selectSquare(5)">Square 6</button>
+                <button class="sq-btn" onclick="selectSquare(6)">Square 7</button>
+                <button class="sq-btn" onclick="selectSquare(7)">Square 8</button>
+                <button class="sq-btn" onclick="selectSquare(8)">Square 9</button>
             </div>
             <button class="action-btn clear-glow" onclick="clearGlow()">Turn Off Glow</button>
         </div>
 
-        <!-- 2. Inputs -->
+        <!-- 2. Question Content & Live Typing -->
         <div class="panel-section">
-            <h3>3. Type Content</h3>
+            <h3>3. Question Content</h3>
+            <label><strong>Import Excel (.xlsx):</strong></label>
+            <input type="file" id="excel-input" accept=".xlsx, .xls" onchange="handleExcelUpload(event)">
+            
+            <label>Loaded Questions Dropdown:</label>
+            <select id="question-select" onchange="loadSelectedQuestion()">
+                <option value="">-- Upload Excel or type manually below --</option>
+            </select>
+
             <label>Trivia Question:</label>
             <textarea id="input-q" rows="2" placeholder="e.g. What color is polar bear skin?"></textarea>
 
-            <label>Star's Answer (Bluff or Truth):</label>
-            <input type="text" id="input-star" placeholder="e.g. Pink!">
-
             <label>Actual True Answer:</label>
             <input type="text" id="input-truth" placeholder="e.g. Black!">
-        </div>
 
-        <!-- 3. Reveals -->
-        <div class="panel-section">
-            <h3>4. Screen Reveal Controls</h3>
-            <button class="reveal-btn" onclick="toggleOverlay(true)">SHOW Overlay Box</button>
-            <button class="reveal-btn" onclick="toggleOverlay(false)">HIDE Overlay Box</button>
             <hr>
-            <button class="reveal-btn" onclick="revealElement('question')">Reveal Question</button>
-            <button class="reveal-btn" onclick="revealElement('star')">Reveal Star's Answer</button>
-            <button class="reveal-btn" onclick="revealElement('truth')">Reveal Actual Answer</button>
-            <button class="action-btn danger" onclick="resetReveals()">Hide All Text</button>
+            <label style="color: #ffd700; font-size: 1.1rem;"><strong>🎙️ Type Star's Live Answer:</strong></label>
+            <input type="text" id="input-star" placeholder="Type what the star says live..." style="border: 2px solid #ffd700;">
         </div>
 
-        <!-- 4. Mark Square -->
+        <!-- 3. Screen Reveals -->
         <div class="panel-section">
-            <h3>5. Award Selected Square</h3>
+            <h3>4. Screen Reveals</h3>
+            <button class="reveal-btn" onclick="showQuestion()">1. Show Question</button>
+            <button class="reveal-btn" onclick="revealStar()" style="background: #ffd700;">2. Type & Reveal Star's Answer</button>
+            <button class="reveal-btn" onclick="revealTruth()">3. Reveal Actual Answer</button>
+            <button class="action-btn danger" style="margin-top: 10px;" onclick="hideAllTexts()">Hide All Texts</button>
+        </div>
+
+        <!-- 4. Award Square & Reset -->
+        <div class="panel-section">
+            <h3>5. Award Square</h3>
             <button class="mark-btn btn-x" onclick="markSquare('X')">Mark X</button>
             <button class="mark-btn btn-o" onclick="markSquare('O')">Mark O</button>
             <button class="mark-btn clear-btn" onclick="markSquare('')">Clear</button>
+            <hr>
+            <button class="action-btn danger" onclick="resetBoard()">Reset Entire Board</button>
         </div>
     </div>
 
