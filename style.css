@@ -122,7 +122,7 @@ h1.main-title {
 /* === PLAYER CHOICE GRAPHIC (AGREE / DISAGREE) === */
 .choice-box {
     margin-top: 15px;
-    padding: 10px;
+    padding: 12px;
     border-radius: 10px;
     font-size: 1.8rem;
     font-weight: 900;
@@ -132,17 +132,23 @@ h1.main-title {
     animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* Reset default paragraph margin inside choice box */
+.choice-box p {
+    margin: 0;
+    padding: 0;
+}
+
 .choice-agree {
     background: #064e3b;
     border: 3px solid #10b981;
-    color: #34d399;
+    color: #34d399 !important;
     box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
 }
 
 .choice-disagree {
     background: #881337;
     border: 3px solid #f43f5e;
-    color: #fb7185;
+    color: #fb7185 !important;
     box-shadow: 0 0 20px rgba(244, 63, 94, 0.6);
 }
 
