@@ -13,7 +13,7 @@
         Current Turn: <span id="tv-turn-display" class="text-x">Player X</span>
     </div>
 
-    <!-- 3x3 Grid (Star titles removed, marks centered) -->
+    <!-- 3x3 Grid -->
     <div class="grid-container" id="grid">
         <div class="square" id="sq-0"><div class="mark"></div></div>
         <div class="square" id="sq-1"><div class="mark"></div></div>
@@ -30,10 +30,19 @@
     <div id="tv-overlay" class="tv-overlay hidden">
         <div class="overlay-card">
             <h2 id="display-question" class="question-text hidden">Question goes here...</h2>
+            
+            <!-- Star Answer Box -->
             <div id="display-star-ans" class="answer-box star-box hidden">
                 <p><strong>STAR SAYS:</strong></p>
                 <p id="star-ans-text">...</p>
             </div>
+
+            <!-- NEW: Player Choice Graphic (AGREE / DISAGREE) -->
+            <div id="display-choice" class="choice-box hidden">
+                <p id="choice-text">AGREE</p>
+            </div>
+
+            <!-- Actual Truth Box -->
             <div id="display-actual-ans" class="answer-box truth-box hidden">
                 <p><strong>ACTUAL TRUTH:</strong></p>
                 <p id="actual-ans-text">...</p>
