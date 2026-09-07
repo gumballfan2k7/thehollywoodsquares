@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hollywood Squares</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>HOLLYWOOD SQUARES</h1>
+
+    <div class="game-info">
+        <p>Current Turn: <span id="current-player" class="player-x">Player X</span></p>
+        <p id="game-status"></p>
+    </div>
+
+    <!-- 3x3 Grid -->
+    <div class="grid-container" id="grid">
+        <!-- 9 Squares generated dynamically or hardcoded -->
+        <div class="square" data-index="0"><span class="star-name">Star 1</span><div class="mark"></div></div>
+        <div class="square" data-index="1"><span class="star-name">Star 2</span><div class="mark"></div></div>
+        <div class="square" data-index="2"><span class="star-name">Star 3</span><div class="mark"></div></div>
+        <div class="square" data-index="3"><span class="star-name">Star 4</span><div class="mark"></div></div>
+        <div class="square" data-index="4"><span class="star-name">Star 5</span><div class="mark"></div></div>
+        <div class="square" data-index="5"><span class="star-name">Star 6</span><div class="mark"></div></div>
+        <div class="square" data-index="6"><span class="star-name">Star 7</span><div class="mark"></div></div>
+        <div class="square" data-index="7"><span class="star-name">Star 8</span><div class="mark"></div></div>
+        <div class="square" data-index="8"><span class="star-name">Star 9</span><div class="mark"></div></div>
+    </div>
+
+    <!-- Question Modal -->
+    <div id="question-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="star-title">Star's Square</h2>
+            <p id="question-text">Question goes here...</p>
+            <div class="answer-box">
+                <p><strong>Star Says:</strong> "<span id="star-response">...</span>"</p>
+            </div>
+            <p>Do you AGREE or DISAGREE with the star?</p>
+            <button id="agree-btn">AGREE</button>
+            <button id="disagree-btn">DISAGREE</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
