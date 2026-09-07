@@ -2,8 +2,8 @@ const channel = new BroadcastChannel('hollywood_squares');
 
 let currentTurn = 'X';
 let activeSquareIndex = null;
+let starTypewriterInterval = null;
 
-// UI Elements
 const turnDisplay = document.getElementById('tv-turn-display');
 const squares = document.querySelectorAll('.square');
 const overlay = document.getElementById('tv-overlay');
@@ -21,7 +21,7 @@ function processCommand(data) {
             currentTurn = data.turn;
             turnDisplay.textContent = `Player ${currentTurn}`;
             turnDisplay.className = currentTurn === 'X' ? 'text-x' : 'text-o';
-            updateSquareGlow(); // Update active glow color immediately
+            updateSquareGlow();
             break;
 
         case 'SELECT_SQUARE':
@@ -31,25 +31,31 @@ function processCommand(data) {
 
         case 'UPDATE_TEXT':
             if (data.question !== undefined) questionText.textContent = data.question;
-            if (data.starAns !== undefined) starAnsText.textContent = data.starAns;
             if (data.truthAns !== undefined) actualAnsText.textContent = data.truthAns;
             break;
 
-        case 'TOGGLE_OVERLAY':
-            if (data.show) overlay.classList.remove('hidden');
-            else overlay.classList.add('hidden');
+        case 'SHOW_QUESTION':
+            overlay.classList.remove('hidden');
+            questionText.classList.remove('hidden');
             break;
 
-        case 'REVEAL_ELEMENT':
-            if (data.element === 'question') questionText.classList.remove('hidden');
-            if (data.element === 'star') starAnsBox.classList.remove('hidden');
-            if (data.element === 'truth') actualAnsBox.classList.remove('hidden');
+        case 'REVEAL_STAR':
+            starAnsBox.classList.remove('hidden');
+            // Typewriter effect on TV screen
+            animateStarText(data.starAns || "");
             break;
 
-        case 'RESET_REVEALS':
+        case 'REVEAL_TRUTH':
+            actualAnsBox.classList.remove('hidden');
+            break;
+
+        case 'HIDE_ALL_TEXTS':
+            overlay.classList.add('hidden');
             questionText.classList.add('hidden');
             starAnsBox.classList.add('hidden');
             actualAnsBox.classList.add('hidden');
+            clearInterval(starTypewriterInterval);
+            starAnsText.textContent = '';
             break;
 
         case 'MARK_SQUARE':
@@ -59,16 +65,51 @@ function processCommand(data) {
                 markDiv.className = `mark ${data.mark}`;
             }
             break;
+
+        case 'WIN_LINE':
+            squares.forEach(sq => sq.classList.remove('winning-line'));
+            if (data.combo) {
+                data.combo.forEach(idx => {
+                    document.getElementById(`sq-${idx}`).classList.add('winning-line');
+                });
+            }
+            break;
+
+        case 'CLEAR_WIN_LINE':
+            squares.forEach(sq => sq.classList.remove('winning-line'));
+            break;
+
+        case 'RESET_BOARD':
+            squares.forEach(sq => {
+                sq.classList.remove('glow-x', 'glow-o', 'winning-line');
+                const markDiv = sq.querySelector('.mark');
+                markDiv.textContent = '';
+                markDiv.className = 'mark';
+            });
+            activeSquareIndex = null;
+            break;
     }
 }
 
-function updateSquareGlow() {
-    // Remove glow from all squares
-    squares.forEach(sq => {
-        sq.classList.remove('glow-x', 'glow-o');
-    });
+// Typewriter Animation for Star's Answer
+function animateStarText(text) {
+    clearInterval(starTypewriterInterval);
+    starAnsText.textContent = '';
+    let i = 0;
 
-    // Add glowing class based on current turn color
+    starTypewriterInterval = setInterval(() => {
+        if (i < text.length) {
+            starAnsText.textContent += text.charAt(i);
+            i++;
+        } else {
+            clearInterval(starTypewriterInterval);
+        }
+    }, 45); // Adjust typing speed in ms
+}
+
+function updateSquareGlow() {
+    squares.forEach(sq => sq.classList.remove('glow-x', 'glow-o'));
+
     if (activeSquareIndex !== null) {
         const activeSquare = document.getElementById(`sq-${activeSquareIndex}`);
         if (activeSquare) {
@@ -78,13 +119,10 @@ function updateSquareGlow() {
     }
 }
 
-// 1. Primary BroadcastChannel Listener
 channel.onmessage = (event) => processCommand(event.data);
 
-// 2. Storage Event Listener Backup
 window.addEventListener('storage', (event) => {
     if (event.key === 'hs_command') {
-        const data = JSON.parse(event.newValue);
-        processCommand(data);
+        processCommand(JSON.parse(event.newValue));
     }
 });
