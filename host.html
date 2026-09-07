@@ -60,7 +60,14 @@
             <h3>4. Screen Reveals</h3>
             <button class="reveal-btn" onclick="showQuestion()">1. Show Question</button>
             <button class="reveal-btn" onclick="revealStar()" style="background: #ffd700;">2. Type & Reveal Star's Answer</button>
-            <button class="reveal-btn" onclick="revealTruth()">3. Reveal Actual Answer</button>
+            
+            <!-- Choice Reveal Buttons -->
+            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                <button class="reveal-btn" onclick="revealChoice('AGREE')" style="background: #10b981; color: #fff;">3a. Reveal AGREE</button>
+                <button class="reveal-btn" onclick="revealChoice('DISAGREE')" style="background: #f43f5e; color: #fff;">3b. Reveal DISAGREE</button>
+            </div>
+
+            <button class="reveal-btn" onclick="revealTruth()">4. Reveal Actual Answer</button>
             <button class="action-btn danger" style="margin-top: 10px;" onclick="hideAllTexts()">Hide All Texts</button>
         </div>
 
