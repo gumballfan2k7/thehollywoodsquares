@@ -42,23 +42,22 @@ function processCommand(data) {
             break;
 
         case 'REVEAL_STAR':
+            overlay.classList.remove('hidden');
             starAnsBox.classList.remove('hidden');
             animateStarText(data.starAns || "");
             break;
 
         case 'REVEAL_CHOICE':
-            // 1. Force the main overlay container to be visible
+            // 1. Force overlay open
             overlay.classList.remove('hidden');
             
-            // 2. Clear old classes cleanly
-            choiceBox.classList.remove('hidden');
-            choiceBox.classList.remove('choice-agree');
-            choiceBox.classList.remove('choice-disagree');
+            // 2. Clear previous display states
+            choiceBox.classList.remove('hidden', 'choice-agree', 'choice-disagree');
 
-            // 3. Force DOM reflow so pop-in animation plays every time
+            // 3. Trigger DOM reflow so pop animation triggers smoothly
             void choiceBox.offsetWidth;
 
-            // 4. Apply text and matching color class
+            // 4. Apply AGREE / DISAGREE styling
             if (data.choice === 'AGREE') {
                 choiceText.textContent = 'PLAYER CHOSE: AGREE';
                 choiceBox.classList.add('choice-agree');
@@ -69,6 +68,7 @@ function processCommand(data) {
             break;
 
         case 'REVEAL_TRUTH':
+            overlay.classList.remove('hidden');
             actualAnsBox.classList.remove('hidden');
             break;
 
@@ -115,7 +115,6 @@ function processCommand(data) {
     }
 }
 
-// Typewriter Animation for Star's Answer
 function animateStarText(text) {
     clearInterval(starTypewriterInterval);
     starAnsText.textContent = '';
