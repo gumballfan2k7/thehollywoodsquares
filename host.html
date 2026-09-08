@@ -13,13 +13,34 @@
     <h1>🎙️ HOST CONTROLLER PANEL</h1>
 
     <div class="host-container">
-        <!-- 1. Turn & Square Selection -->
+        
+        <!-- 1. Turn Selection -->
         <div class="panel-section">
             <h3>1. Turn Selection</h3>
             <button id="btn-turn-x" class="btn-x btn-active" onclick="setTurn('X')" style="width: 48%;">Player X (Purple)</button>
             <button id="btn-turn-o" class="btn-o" onclick="setTurn('O')" style="width: 48%;">Player O (Yellow)</button>
+        </div>
 
-            <h3 style="margin-top: 15px;">2. Pick Square to Highlight</h3>
+        <!-- 2. Star Names Definition -->
+        <div class="panel-section">
+            <h3>2. Set Star Names on Board</h3>
+            <div class="host-grid">
+                <input type="text" id="name-0" class="name-input" placeholder="1. Top Left">
+                <input type="text" id="name-1" class="name-input" placeholder="2. Top Mid">
+                <input type="text" id="name-2" class="name-input" placeholder="3. Top Right">
+                <input type="text" id="name-3" class="name-input" placeholder="4. Mid Left">
+                <input type="text" id="name-4" class="name-input" placeholder="5. Center">
+                <input type="text" id="name-5" class="name-input" placeholder="6. Mid Right">
+                <input type="text" id="name-6" class="name-input" placeholder="7. Bot Left">
+                <input type="text" id="name-7" class="name-input" placeholder="8. Bot Mid">
+                <input type="text" id="name-8" class="name-input" placeholder="9. Bot Right">
+            </div>
+            <button class="action-btn" style="background: #3b82f6; color: white; width: 100%; margin-top: 10px;" onclick="pushStarNames()">📺 Push Names to TV</button>
+        </div>
+
+        <!-- 3. Pick Square -->
+        <div class="panel-section">
+            <h3>3. Pick Square to Highlight</h3>
             <div class="host-grid">
                 <button class="sq-btn" onclick="selectSquare(0)">Square 1</button>
                 <button class="sq-btn" onclick="selectSquare(1)">Square 2</button>
@@ -34,9 +55,9 @@
             <button class="action-btn clear-glow" onclick="clearGlow()">Turn Off Glow</button>
         </div>
 
-        <!-- 2. Question Content & Excel Template -->
+        <!-- 4. Question Content & Excel Template -->
         <div class="panel-section">
-            <h3>3. Question Content</h3>
+            <h3>4. Question Content</h3>
             
             <div style="background: #2b2b3d; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
                 <label><strong>1. Get Excel Template:</strong></label>
@@ -62,9 +83,9 @@
             <input type="text" id="input-star" placeholder="Type what the star says live..." style="border: 2px solid #ffd700;">
         </div>
 
-        <!-- 3. Screen Reveals -->
+        <!-- 5. Screen Reveals -->
         <div class="panel-section">
-            <h3>4. Screen Reveals</h3>
+            <h3>5. Screen Reveals</h3>
             <button class="reveal-btn" onclick="showQuestion()">1. Show Question</button>
             <button class="reveal-btn" onclick="revealStar()" style="background: #ffd700; color: #000;">2. Type & Reveal Star's Answer</button>
             
@@ -77,12 +98,12 @@
             <button class="action-btn danger" style="margin-top: 10px;" onclick="hideAllTexts()">Hide All Texts</button>
         </div>
 
-        <!-- 4. Award Square & Reset -->
+        <!-- 6. Award Square & Reset -->
         <div class="panel-section">
-            <h3>5. Award Square</h3>
+            <h3>6. Award Square</h3>
             <button class="mark-btn btn-x" onclick="markSquare('X')">Mark X</button>
             <button class="mark-btn btn-o" onclick="markSquare('O')">Mark O</button>
-            <button class="mark-btn clear-btn" onclick="markSquare('')">Clear</button>
+            <button class="mark-btn clear-btn" onclick="markSquare('')">Clear Mark</button>
             <hr>
             <button class="action-btn danger" onclick="resetBoard()">Reset Entire Board</button>
         </div>
