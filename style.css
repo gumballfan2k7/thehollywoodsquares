@@ -54,7 +54,7 @@ h1.main-title {
 .mark.X { color: #a855f7; text-shadow: 0 0 15px #a855f7; }
 .mark.O { color: #facc15; text-shadow: 0 0 15px #facc15; }
 
-/* Dynamic Turn Glows */
+/* Turn Glow Effects */
 .square.glow-x {
     border-color: #a855f7 !important;
     box-shadow: 0 0 30px #a855f7, inset 0 0 15px #a855f7;
@@ -93,7 +93,7 @@ h1.main-title {
     100% { box-shadow: 0 0 60px #00ff66, 0 0 20px #ffffff, inset 0 0 35px #00ff66; }
 }
 
-/* Overlay Box Styling */
+/* Overlay Styling */
 .tv-overlay {
     margin-top: 25px;
     display: flex;
@@ -119,7 +119,7 @@ h1.main-title {
 .star-box { background: #3d1e6d; border: 2px solid #a855f7; }
 .truth-box { background: #1a4c33; border: 2px solid #00ff66; }
 
-/* === PLAYER CHOICE GRAPHIC (AGREE / DISAGREE) === */
+/* PLAYER CHOICE GRAPHIC (AGREE / DISAGREE) */
 .choice-box {
     margin-top: 15px;
     padding: 12px;
@@ -132,7 +132,6 @@ h1.main-title {
     animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Reset default paragraph margin inside choice box */
 .choice-box p {
     margin: 0;
     padding: 0;
