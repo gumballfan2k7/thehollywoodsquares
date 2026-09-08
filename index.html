@@ -13,17 +13,17 @@
         Current Turn: <span id="tv-turn-display" class="text-x">Player X</span>
     </div>
 
-    <!-- 3x3 Grid -->
+    <!-- 3x3 Grid with Name containers added -->
     <div class="grid-container" id="grid">
-        <div class="square" id="sq-0"><div class="mark"></div></div>
-        <div class="square" id="sq-1"><div class="mark"></div></div>
-        <div class="square" id="sq-2"><div class="mark"></div></div>
-        <div class="square" id="sq-3"><div class="mark"></div></div>
-        <div class="square" id="sq-4"><div class="mark"></div></div>
-        <div class="square" id="sq-5"><div class="mark"></div></div>
-        <div class="square" id="sq-6"><div class="mark"></div></div>
-        <div class="square" id="sq-7"><div class="mark"></div></div>
-        <div class="square" id="sq-8"><div class="mark"></div></div>
+        <div class="square" id="sq-0"><div class="star-name"></div><div class="mark"></div></div>
+        <div class="square" id="sq-1"><div class="star-name"></div><div class="mark"></div></div>
+        <div class="square" id="sq-2"><div class="star-name"></div><div class="mark"></div></div>
+        <div class="square" id="sq-3"><div class="star-name"></div><div class="mark"></div></div>
+        <div class="square" id="sq-4"><div class="star-name"></div><div class="mark"></div></div>
+        <div class="square" id="sq-5"><div class="star-name"></div><div class="mark"></div></div>
+        <div class="square" id="sq-6"><div class="star-name"></div><div class="mark"></div></div>
+        <div class="square" id="sq-7"><div class="star-name"></div><div class="mark"></div></div>
+        <div class="square" id="sq-8"><div class="star-name"></div><div class="mark"></div></div>
     </div>
 
     <!-- On-Screen Question & Answer Display -->
@@ -31,18 +31,15 @@
         <div class="overlay-card">
             <h2 id="display-question" class="question-text hidden">Question goes here...</h2>
             
-            <!-- Star Answer Box -->
             <div id="display-star-ans" class="answer-box star-box hidden">
                 <p><strong>STAR SAYS:</strong></p>
                 <p id="star-ans-text">...</p>
             </div>
 
-            <!-- Player AGREE / DISAGREE Reveal Graphic -->
             <div id="display-choice" class="choice-box hidden">
                 <p id="choice-text">PLAYER CHOSE: AGREE</p>
             </div>
 
-            <!-- Actual Truth Box -->
             <div id="display-actual-ans" class="answer-box truth-box hidden">
                 <p><strong>ACTUAL TRUTH:</strong></p>
                 <p id="actual-ans-text">...</p>
