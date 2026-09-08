@@ -5,21 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Host Controller Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <!-- SheetJS CDN for parsing & generating Excel files -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        .star-name-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .star-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .star-input-group label {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-bottom: 2px;
+        }
+        .star-input-group input {
+            text-transform: uppercase;
+            font-weight: bold;
+            padding: 6px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body class="host-body">
 
     <h1>🎙️ HOST CONTROLLER PANEL</h1>
 
     <div class="host-container">
-        <!-- 1. Turn & Square Selection -->
-        <div class="panel-section">
-            <h3>1. Turn Selection</h3>
-            <button id="btn-turn-x" class="btn-x btn-active" onclick="setTurn('X')" style="width: 48%;">Player X (Purple)</button>
-            <button id="btn-turn-o" class="btn-o" onclick="setTurn('O')" style="width: 48%;">Player O (Yellow)</button>
+        
+        <!-- 1. Star Names Setup -->
+        <div class="panel-section" style="grid-column: span 2;">
+            <h3>⭐ 1. Star Names Setup (ALL CAPS & BOLD)</h3>
+            <div class="star-name-grid">
+                <div class="star-input-group"><label>Square 1</label><input type="text" id="star-name-0" placeholder="STAR 1"></div>
+                <div class="star-input-group"><label>Square 2</label><input type="text" id="star-name-1" placeholder="STAR 2"></div>
+                <div class="star-input-group"><label>Square 3</label><input type="text" id="star-name-2" placeholder="STAR 3"></div>
+                <div class="star-input-group"><label>Square 4</label><input type="text" id="star-name-3" placeholder="STAR 4"></div>
+                <div class="star-input-group"><label>Square 5</label><input type="text" id="star-name-4" placeholder="STAR 5"></div>
+                <div class="star-input-group"><label>Square 6</label><input type="text" id="star-name-5" placeholder="STAR 6"></div>
+                <div class="star-input-group"><label>Square 7</label><input type="text" id="star-name-6" placeholder="STAR 7"></div>
+                <div class="star-input-group"><label>Square 8</label><input type="text" id="star-name-7" placeholder="STAR 8"></div>
+                <div class="star-input-group"><label>Square 9</label><input type="text" id="star-name-8" placeholder="STAR 9"></div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button type="button" onclick="saveStarNames()" style="background: #3b82f6; color: #fff; flex: 1;">💾 Save / Update Names</button>
+                <button type="button" onclick="revealAllStarNames()" style="background: #10b981; color: #fff; flex: 1;">👁️ Reveal All Names</button>
+                <button type="button" onclick="hideAllStarNames()" style="background: #ef4444; color: #fff; flex: 1;">🙈 Hide All Names</button>
+            </div>
+        </div>
 
-            <h3 style="margin-top: 15px;">2. Pick Square to Highlight</h3>
+        <!-- 2. Turn & Square Selection -->
+        <div class="panel-section">
+            <h3>2. Turn & Highlight Pick</h3>
+            <button id="btn-turn-x" class="btn-x btn-active" onclick="setTurn('X')" style="width: 48%;">Player X</button>
+            <button id="btn-turn-o" class="btn-o" onclick="setTurn('O')" style="width: 48%;">Player O</button>
+
+            <h3 style="margin-top: 15px;">Pick Square to Highlight</h3>
             <div class="host-grid">
                 <button class="sq-btn" onclick="selectSquare(0)">Square 1</button>
                 <button class="sq-btn" onclick="selectSquare(1)">Square 2</button>
@@ -34,13 +78,13 @@
             <button class="action-btn clear-glow" onclick="clearGlow()">Turn Off Glow</button>
         </div>
 
-        <!-- 2. Question Content & Excel Template -->
+        <!-- 3. Question Content & Live Typing -->
         <div class="panel-section">
             <h3>3. Question Content</h3>
             
             <div style="background: #2b2b3d; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
                 <label><strong>1. Get Excel Template:</strong></label>
-                <button type="button" onclick="downloadTemplate()" style="background: #10b981; color: #fff; width: 100%; margin: 5px 0 10px 0;">📥 Download Excel Template (.xlsx)</button>
+                <button type="button" onclick="downloadTemplate()" style="background: #10b981; color: #fff; width: 100%; margin: 5px 0 10px 0;">📥 Download 2-Column Template (.xlsx)</button>
                 
                 <label><strong>2. Upload Completed Excel File:</strong></label>
                 <input type="file" id="excel-input" accept=".xlsx, .xls" onchange="handleExcelUpload(event)">
@@ -48,7 +92,7 @@
 
             <label>Select Loaded Question:</label>
             <select id="question-select" onchange="loadSelectedQuestion()">
-                <option value="">-- Download template above or type manually --</option>
+                <option value="">-- Select a Question --</option>
             </select>
 
             <label>Trivia Question:</label>
@@ -62,7 +106,7 @@
             <input type="text" id="input-star" placeholder="Type what the star says live..." style="border: 2px solid #ffd700;">
         </div>
 
-        <!-- 3. Screen Reveals -->
+        <!-- 4. Screen Reveals -->
         <div class="panel-section">
             <h3>4. Screen Reveals</h3>
             <button class="reveal-btn" onclick="showQuestion()">1. Show Question</button>
@@ -77,12 +121,12 @@
             <button class="action-btn danger" style="margin-top: 10px;" onclick="hideAllTexts()">Hide All Texts</button>
         </div>
 
-        <!-- 4. Award Square & Reset -->
+        <!-- 5. Award Square & Reset -->
         <div class="panel-section">
             <h3>5. Award Square</h3>
             <button class="mark-btn btn-x" onclick="markSquare('X')">Mark X</button>
             <button class="mark-btn btn-o" onclick="markSquare('O')">Mark O</button>
-            <button class="mark-btn clear-btn" onclick="markSquare('')">Clear</button>
+            <button class="mark-btn clear-btn" onclick="markSquare('')">Clear Mark</button>
             <hr>
             <button class="action-btn danger" onclick="resetBoard()">Reset Entire Board</button>
         </div>
