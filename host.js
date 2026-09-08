@@ -24,6 +24,16 @@ function setTurn(turn) {
     sendCommand({ type: 'SET_TURN', turn: turn });
 }
 
+/* --- Star Names --- */
+function pushStarNames() {
+    let names = [];
+    for (let i = 0; i < 9; i++) {
+        names.push(document.getElementById(`name-${i}`).value);
+    }
+    sendCommand({ type: 'UPDATE_NAMES', names: names });
+}
+
+/* --- Square Selection --- */
 function selectSquare(index) {
     activeSquareIndex = index;
     sendCommand({ type: 'SELECT_SQUARE', index: index });
@@ -34,22 +44,19 @@ function clearGlow() {
     sendCommand({ type: 'SELECT_SQUARE', index: null });
 }
 
-/* --- Excel Template Generator & Parser --- */
+/* --- Excel Template Generator & Parser (Updated 2-Column format) --- */
 function downloadTemplate() {
     const sampleData = [
         {
             "Question": "What color is a polar bear's skin under its white fur?",
-            "Star Answer": "Pink!",
             "Actual Answer": "Black"
         },
         {
             "Question": "Which planet in our solar system rotates backwards?",
-            "Star Answer": "Mars!",
             "Actual Answer": "Venus"
         },
         {
             "Question": "How many hearts does an octopus have?",
-            "Star Answer": "One!",
             "Actual Answer": "Three"
         }
     ];
@@ -99,8 +106,8 @@ function loadSelectedQuestion() {
     document.getElementById('input-q').value = q["Question"] || q["question"] || "";
     document.getElementById('input-truth').value = q["Actual Answer"] || q["actual answer"] || q["True Answer"] || "";
     
-    // Auto-fill Star Answer if present in Excel, or leave clear for live typing
-    document.getElementById('input-star').value = q["Star Answer"] || q["star answer"] || "";
+    // Clear live typed answer box
+    document.getElementById('input-star').value = "";
 
     sendTextData();
 }
@@ -180,7 +187,7 @@ function checkWinningLine() {
 }
 
 function resetBoard() {
-    if (confirm("Reset the entire board?")) {
+    if (confirm("Reset the entire board? The Star Names will remain intact.")) {
         boardState = Array(9).fill('');
         activeSquareIndex = null;
         sendCommand({ type: 'RESET_BOARD' });
