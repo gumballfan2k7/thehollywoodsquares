@@ -34,7 +34,32 @@ function clearGlow() {
     sendCommand({ type: 'SELECT_SQUARE', index: null });
 }
 
-/* --- Excel Processing --- */
+/* --- Excel Template Generator & Parser --- */
+function downloadTemplate() {
+    const sampleData = [
+        {
+            "Question": "What color is a polar bear's skin under its white fur?",
+            "Star Answer": "Pink!",
+            "Actual Answer": "Black"
+        },
+        {
+            "Question": "Which planet in our solar system rotates backwards?",
+            "Star Answer": "Mars!",
+            "Actual Answer": "Venus"
+        },
+        {
+            "Question": "How many hearts does an octopus have?",
+            "Star Answer": "One!",
+            "Actual Answer": "Three"
+        }
+    ];
+
+    const worksheet = XLSX.utils.json_to_sheet(sampleData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Questions");
+    XLSX.writeFile(workbook, "HollywoodSquares_Questions_Template.xlsx");
+}
+
 function handleExcelUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -74,7 +99,9 @@ function loadSelectedQuestion() {
     document.getElementById('input-q').value = q["Question"] || q["question"] || "";
     document.getElementById('input-truth').value = q["Actual Answer"] || q["actual answer"] || q["True Answer"] || "";
     
-    document.getElementById('input-star').value = "";
+    // Auto-fill Star Answer if present in Excel, or leave clear for live typing
+    document.getElementById('input-star').value = q["Star Answer"] || q["star answer"] || "";
+
     sendTextData();
 }
 
@@ -86,7 +113,7 @@ function sendTextData() {
     });
 }
 
-/* --- Screen Reveal Functions --- */
+/* --- Screen Reveals --- */
 function showQuestion() {
     sendTextData();
     sendCommand({ type: 'SHOW_QUESTION' });
@@ -116,7 +143,7 @@ function hideAllTexts() {
     sendCommand({ type: 'HIDE_ALL_TEXTS' });
 }
 
-/* --- Mark & Game State --- */
+/* --- Mark & Win Detection --- */
 function markSquare(symbol) {
     if (activeSquareIndex === null) {
         alert("Please select a square first!");
