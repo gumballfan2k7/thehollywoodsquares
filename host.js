@@ -3,6 +3,8 @@ const channel = new BroadcastChannel('hollywood_squares');
 let currentTurn = 'X';
 let activeSquareIndex = null;
 let boardState = Array(9).fill('');
+let starNames = Array(9).fill('');
+let starRevealed = Array(9).fill(false);
 let parsedQuestions = [];
 
 const winningCombos = [
@@ -17,6 +19,44 @@ function sendCommand(data) {
     localStorage.setItem('hs_command', JSON.stringify(data));
 }
 
+/* --- Star Name Management --- */
+function saveStarNames() {
+    for (let i = 0; i < 9; i++) {
+        const input = document.getElementById(`star-name-${i}`);
+        if (input) {
+            starNames[i] = input.value.trim().toUpperCase();
+            input.value = starNames[i]; // Force uppercase in input box
+        }
+    }
+    sendStarNamesData();
+}
+
+function revealAllStarNames() {
+    saveStarNames();
+    starRevealed = Array(9).fill(true);
+    sendStarNamesData();
+}
+
+function hideAllStarNames() {
+    starRevealed = Array(9).fill(false);
+    sendStarNamesData();
+}
+
+function toggleStarNameReveal(index) {
+    saveStarNames();
+    starRevealed[index] = !starRevealed[index];
+    sendStarNamesData();
+}
+
+function sendStarNamesData() {
+    sendCommand({
+        type: 'UPDATE_STAR_NAMES',
+        names: starNames,
+        revealed: starRevealed
+    });
+}
+
+/* --- Gameplay & Board Controls --- */
 function setTurn(turn) {
     currentTurn = turn;
     document.getElementById('btn-turn-x').classList.toggle('btn-active', turn === 'X');
@@ -34,22 +74,19 @@ function clearGlow() {
     sendCommand({ type: 'SELECT_SQUARE', index: null });
 }
 
-/* --- Excel Template Generator & Parser --- */
+/* --- Excel Template Generator & Parser (2 Columns) --- */
 function downloadTemplate() {
     const sampleData = [
         {
             "Question": "What color is a polar bear's skin under its white fur?",
-            "Star Answer": "Pink!",
             "Actual Answer": "Black"
         },
         {
             "Question": "Which planet in our solar system rotates backwards?",
-            "Star Answer": "Mars!",
             "Actual Answer": "Venus"
         },
         {
             "Question": "How many hearts does an octopus have?",
-            "Star Answer": "One!",
             "Actual Answer": "Three"
         }
     ];
@@ -99,8 +136,8 @@ function loadSelectedQuestion() {
     document.getElementById('input-q').value = q["Question"] || q["question"] || "";
     document.getElementById('input-truth').value = q["Actual Answer"] || q["actual answer"] || q["True Answer"] || "";
     
-    // Auto-fill Star Answer if present in Excel, or leave clear for live typing
-    document.getElementById('input-star').value = q["Star Answer"] || q["star answer"] || "";
+    // Clear live star answer box for fresh typing
+    document.getElementById('input-star').value = "";
 
     sendTextData();
 }
