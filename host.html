@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Host Controller Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <!-- SheetJS CDN for parsing & generating Excel files -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body class="host-body">
@@ -33,15 +34,21 @@
             <button class="action-btn clear-glow" onclick="clearGlow()">Turn Off Glow</button>
         </div>
 
-        <!-- 2. Question Content & Live Typing -->
+        <!-- 2. Question Content & Excel Template -->
         <div class="panel-section">
             <h3>3. Question Content</h3>
-            <label><strong>Import Excel (.xlsx):</strong></label>
-            <input type="file" id="excel-input" accept=".xlsx, .xls" onchange="handleExcelUpload(event)">
             
-            <label>Loaded Questions Dropdown:</label>
+            <div style="background: #2b2b3d; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
+                <label><strong>1. Get Excel Template:</strong></label>
+                <button type="button" onclick="downloadTemplate()" style="background: #10b981; color: #fff; width: 100%; margin: 5px 0 10px 0;">📥 Download Excel Template (.xlsx)</button>
+                
+                <label><strong>2. Upload Completed Excel File:</strong></label>
+                <input type="file" id="excel-input" accept=".xlsx, .xls" onchange="handleExcelUpload(event)">
+            </div>
+
+            <label>Select Loaded Question:</label>
             <select id="question-select" onchange="loadSelectedQuestion()">
-                <option value="">-- Upload Excel or type manually below --</option>
+                <option value="">-- Download template above or type manually --</option>
             </select>
 
             <label>Trivia Question:</label>
@@ -59,12 +66,11 @@
         <div class="panel-section">
             <h3>4. Screen Reveals</h3>
             <button class="reveal-btn" onclick="showQuestion()">1. Show Question</button>
-            <button class="reveal-btn" onclick="revealStar()" style="background: #ffd700;">2. Type & Reveal Star's Answer</button>
+            <button class="reveal-btn" onclick="revealStar()" style="background: #ffd700; color: #000;">2. Type & Reveal Star's Answer</button>
             
-            <!-- Choice Reveal Buttons -->
-            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
-                <button class="reveal-btn" onclick="revealChoice('AGREE')" style="background: #10b981; color: #fff;">3a. Reveal AGREE</button>
-                <button class="reveal-btn" onclick="revealChoice('DISAGREE')" style="background: #f43f5e; color: #fff;">3b. Reveal DISAGREE</button>
+            <div style="display: flex; gap: 5px; margin: 5px 0;">
+                <button class="reveal-btn" onclick="revealChoice('AGREE')" style="background: #10b981; color: #fff; flex: 1;">3a. Reveal AGREE</button>
+                <button class="reveal-btn" onclick="revealChoice('DISAGREE')" style="background: #f43f5e; color: #fff; flex: 1;">3b. Reveal DISAGREE</button>
             </div>
 
             <button class="reveal-btn" onclick="revealTruth()">4. Reveal Actual Answer</button>
