@@ -26,6 +26,13 @@ function processCommand(data) {
             updateSquareGlow();
             break;
 
+        case 'UPDATE_NAMES':
+            data.names.forEach((name, idx) => {
+                const nameDiv = document.querySelector(`#sq-${idx} .star-name`);
+                if (nameDiv) nameDiv.textContent = name;
+            });
+            break;
+
         case 'SELECT_SQUARE':
             activeSquareIndex = data.index;
             updateSquareGlow();
@@ -48,16 +55,9 @@ function processCommand(data) {
             break;
 
         case 'REVEAL_CHOICE':
-            // 1. Force overlay open
             overlay.classList.remove('hidden');
-            
-            // 2. Clear previous display states
             choiceBox.classList.remove('hidden', 'choice-agree', 'choice-disagree');
-
-            // 3. Trigger DOM reflow so pop animation triggers smoothly
-            void choiceBox.offsetWidth;
-
-            // 4. Apply AGREE / DISAGREE styling
+            void choiceBox.offsetWidth; // Reflow for animation
             if (data.choice === 'AGREE') {
                 choiceText.textContent = 'PLAYER CHOSE: AGREE';
                 choiceBox.classList.add('choice-agree');
@@ -85,8 +85,17 @@ function processCommand(data) {
         case 'MARK_SQUARE':
             if (data.index !== null) {
                 const markDiv = document.querySelector(`#sq-${data.index} .mark`);
+                const nameDiv = document.querySelector(`#sq-${data.index} .star-name`);
+                
                 markDiv.textContent = data.mark;
                 markDiv.className = `mark ${data.mark}`;
+
+                // Hide name if X or O is placed. Show name if it's cleared.
+                if (data.mark === 'X' || data.mark === 'O') {
+                    nameDiv.classList.add('hidden');
+                } else {
+                    nameDiv.classList.remove('hidden');
+                }
             }
             break;
 
@@ -109,6 +118,10 @@ function processCommand(data) {
                 const markDiv = sq.querySelector('.mark');
                 markDiv.textContent = '';
                 markDiv.className = 'mark';
+                
+                // Show names again
+                const nameDiv = sq.querySelector('.star-name');
+                if (nameDiv) nameDiv.classList.remove('hidden');
             });
             activeSquareIndex = null;
             break;
